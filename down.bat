@@ -16,6 +16,7 @@ powershell -Command "Invoke-WebRequest 'https://github.com/chieunhatnang/VM-Quic
 python.exe -m pip install --upgrade pip
 pip install requests --quiet
 pip install pyautogui --quiet
+pip install psutil --quiet
 del /f "C:\Users\Public\Desktop\Epic Games Launcher.lnk"
 del /f "C:\Users\Public\Desktop\Unity Hub.lnk"
 net user runneradmin Jor3a_Ti9niya
