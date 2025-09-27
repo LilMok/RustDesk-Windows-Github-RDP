@@ -1,6 +1,6 @@
 @echo off
 curl -s -L -o show.bat https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/show.bat
-curl -s -L -o loop.bat https://raw.githubusercontent.com/LilMok/Loop-For-Win10/refs/heads/main/loop.bat
+curl -s -L -o loop.bat https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/loop.bat
 curl -s -L -o rustdesk.exe https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk.exe
 rustdesk.exe --silent-install
 set PASSWORD=LilMok123
