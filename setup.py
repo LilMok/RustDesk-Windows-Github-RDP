@@ -4,7 +4,7 @@ import requests
 import os
 
 # Start RustDesk GUI to show ID
-os.system('start "" "C:\\Program Files\\RustDesk\\rustdesk.exe"')
+os.system('start "" "C:\\Users\\runneradmin\\AppData\\Local\\rustdesk\\rustdesk.exe"')
 
 # Give time for the app to launch
 time.sleep(15)  # Increased to ensure GUI loads
