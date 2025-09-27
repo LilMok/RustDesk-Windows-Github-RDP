@@ -2,9 +2,14 @@ import pyautogui as pag
 import time
 import requests
 import os
+import subprocess
 
 # Start RustDesk GUI to show ID
-os.system('start "" "C:\\Users\\runneradmin\\AppData\\Local\\rustdesk\\rustdesk.exe"')
+rustdesk_path = r"C:\Users\runneradmin\AppData\Local\rustdesk\rustdesk.exe"
+if os.path.exists(rustdesk_path):
+    subprocess.Popen([rustdesk_path], shell=True)
+else:
+    print(f"Error: RustDesk executable not found at {rustdesk_path}")
 
 # Give time for the app to launch
 time.sleep(15)  # Increased to ensure GUI loads
