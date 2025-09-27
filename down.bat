@@ -2,6 +2,7 @@
 curl -s -L -o show.bat https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/show.bat
 curl -s -L -o loop.bat https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/loop.bat
 curl -s -L -o loop.py https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/loop.py
+curl -s -L -o setup.py https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/setup.py
 
 :: Fetch latest RustDesk version tag
 powershell -Command "$latest = (Invoke-WebRequest -Uri 'https://api.github.com/repos/rustdesk/rustdesk/releases/latest' -UseBasicParsing).Content | ConvertFrom-Json | Select-Object -ExpandProperty tag_name; echo $latest > latest_tag.txt"
@@ -14,7 +15,7 @@ curl -s -L -o rustdesk.exe https://github.com/rustdesk/rustdesk/releases/downloa
 :: Install silently
 rustdesk.exe --silent-install
 
-set PASSWORD=LilMok123
+set PASSWORD=LilMok@123
 set RUSTDESK_PATH="C:\Program Files\RustDesk\rustdesk.exe"
 
 %RUSTDESK_PATH% --password %PASSWORD%
@@ -35,8 +36,12 @@ python.exe -m pip install --upgrade pip
 pip install requests --quiet
 pip install pyautogui --quiet
 pip install psutil --quiet
+pip install telegraph --quiet  :: If needed for upload, but using gofile
 
 del /f "C:\Users\Public\Desktop\Epic Games Launcher.lnk" >nul 2>&1
 del /f "C:\Users\Public\Desktop\Unity Hub.lnk" >nul 2>&1
 
-net user runneradmin LilMok@123
+net user runneradmin %PASSWORD%
+
+:: Run setup.py for screenshot and upload (to debug ID issues)
+python setup.py
