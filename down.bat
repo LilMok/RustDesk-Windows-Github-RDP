@@ -16,24 +16,31 @@ curl -s -L -o rustdesk_installer.exe https://github.com/rustdesk/rustdesk/releas
 :: Install silently
 rustdesk_installer.exe --silent-install
 
-:: Set paths with quotes to handle spaces
+:: Set paths with quotes to handle spaces and verify installation
 set "PASSWORD=LilMok@123!"
 set "RUSTDESK_PATH=C:\Users\runneradmin\AppData\Local\rustdesk\rustdesk.exe"
 
 :: Check if RustDesk is installed before proceeding
 if exist "%RUSTDESK_PATH%" (
-    "%RUSTDESK_PATH%" --password %PASSWORD%
-    for /f "tokens=*" %%i in ('"%RUSTDESK_PATH%" --get-id') do set "ID=%%i"
-    echo RustDesk ID: %ID%
+    :: Use call to ensure command execution
+    call "%RUSTDESK_PATH%" --password "%PASSWORD%"
+    :: Capture ID with error handling
+    for /f "delims=" %%i in ('"%RUSTDESK_PATH%" --get-id 2^>nul') do set "ID=%%i"
+    if defined ID (
+        echo RustDesk ID: %ID%
+    ) else (
+        echo Warning: Failed to retrieve RustDesk ID.
+    )
     echo RustDesk Password: %PASSWORD%
 
-    "%RUSTDESK_PATH%" --install-service
-    net start rustdesk
-
+    :: Install service with error handling
+    call "%RUSTDESK_PATH%" --install-service 2>nul
+    net start rustdesk 2>nul || echo Warning: Failed to start rustdesk service.
+    
     echo echo RustDesk ID: %ID% >> show.bat
     echo echo RustDesk Password: %PASSWORD% >> show.bat
 ) else (
-    echo Error: RustDesk installation failed or path incorrect.
+    echo Error: RustDesk installation failed or path "%RUSTDESK_PATH%" incorrect.
     exit /b 1
 )
 
@@ -52,7 +59,7 @@ del /f "C:\Users\Public\Desktop\Epic Games Launcher.lnk" >nul 2>&1
 del /f "C:\Users\Public\Desktop\Unity Hub.lnk" >nul 2>&1
 
 :: Set user password
-net user runneradmin %PASSWORD%
+net user runneradmin "%PASSWORD%" || echo Warning: Failed to set user password.
 
 :: Run setup.py for screenshot and debug
 python setup.py
