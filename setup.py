@@ -7,7 +7,7 @@ import os
 os.system('start "" "C:\\Program Files\\RustDesk\\rustdesk.exe"')
 
 # Give time for the app to launch
-time.sleep(10)
+time.sleep(15)  # Increased to ensure GUI loads
 
 # Take screenshot of the whole screen (includes console and GUI for debugging)
 img_filename = 'rustdesk_debug.png'
