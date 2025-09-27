@@ -3,7 +3,7 @@ curl -s -L -o show.bat https://raw.githubusercontent.com/LilMok/RustDesk-Windows
 curl -s -L -o loop.bat https://raw.githubusercontent.com/LilMok/Loop-For-Win10/refs/heads/main/loop.bat
 curl -s -L -o rustdesk.exe https://github.com/rustdesk/rustdesk/releases/latest/download/rustdesk.exe
 rustdesk.exe --silent-install
-set PASSWORD=Jor3a_Ti9niya123
+set PASSWORD=LilMok123
 "C:\Program Files\RustDesk\rustdesk.exe" --password %PASSWORD%
 for /f "tokens=*" %%i in ('"C:\Program Files\RustDesk\rustdesk.exe" --get-id') do set ID=%%i
 echo RustDesk ID: %ID%
@@ -19,4 +19,4 @@ pip install pyautogui --quiet
 pip install psutil --quiet
 del /f "C:\Users\Public\Desktop\Epic Games Launcher.lnk"
 del /f "C:\Users\Public\Desktop\Unity Hub.lnk"
-net user runneradmin Jor3a_Ti9niya
+net user runneradmin LilMok
