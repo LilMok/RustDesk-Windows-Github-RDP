@@ -17,17 +17,17 @@ curl -s -L -o rustdesk_installer.exe https://github.com/rustdesk/rustdesk/releas
 rustdesk_installer.exe --silent-install
 
 :: Set paths with quotes to handle spaces
-set "PASSWORD=LilMok@123"
-set "RUSTDESK_PATH=C:\Program Files\RustDesk\rustdesk.exe"
+set "PASSWORD=LilMok@123!"
+set "RUSTDESK_PATH=C:\Users\runneradmin\AppData\Local\rustdesk\rustdesk.exe"
 
 :: Check if RustDesk is installed before proceeding
-if exist %RUSTDESK_PATH% (
-    %RUSTDESK_PATH% --password %PASSWORD%
-    for /f "tokens=*" %%i in ('%RUSTDESK_PATH% --get-id') do set "ID=%%i"
+if exist "%RUSTDESK_PATH%" (
+    "%RUSTDESK_PATH%" --password %PASSWORD%
+    for /f "tokens=*" %%i in ('"%RUSTDESK_PATH%" --get-id') do set "ID=%%i"
     echo RustDesk ID: %ID%
     echo RustDesk Password: %PASSWORD%
 
-    %RUSTDESK_PATH% --install-service
+    "%RUSTDESK_PATH%" --install-service
     net start rustdesk
 
     echo echo RustDesk ID: %ID% >> show.bat
