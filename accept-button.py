@@ -4,8 +4,29 @@ import time
 import pyautogui
 import os
 import json
+import subprocess
+import sys
 
 CONFIG_FILE = "config.json"
+
+def setup_environment():
+    # Check if venv exists, create if not
+    venv_path = os.path.join(os.path.dirname(__file__), "venv")
+    if not os.path.exists(venv_path):
+        print("Creating virtual environment...")
+        subprocess.check_call([sys.executable, "-m", "venv", venv_path])
+        print("Virtual environment created.")
+
+    # Activate venv and install requirements
+    activate_script = os.path.join(venv_path, "Scripts", "activate.bat") if os.name == 'nt' else os.path.join(venv_path, "bin", "activate")
+    requirements = ["pywinauto", "pyautogui"]
+    
+    for req in requirements:
+        try:
+            subprocess.check_call([os.path.join(venv_path, "Scripts", "pip"), "install", req])
+        except subprocess.CalledProcessError:
+            print(f"Failed to install {req}. Please install manually or check your internet connection.")
+    print("Requirements installed.")
 
 def load_or_calibrate_coordinates():
     if os.path.exists(CONFIG_FILE):
@@ -17,12 +38,10 @@ def load_or_calibrate_coordinates():
         print("Calibration mode: Ensure the RustDesk 'Admin' window is open and visible.")
         print("If the window title differs, note it for manual adjustment.")
         try:
-            # Try UIA backend with longer timeout and partial title match
             print("Attempting to connect using UIA backend...")
             app = Application(backend="uia").connect(title_re=".*Admin.*", timeout=30)
             dlg = app.window(title_re=".*Admin.*")
         except Exception:
-            # Fallback to win32 backend with partial title match
             print("Falling back to win32 backend...")
             app = Application(backend="win32").connect(title_re=".*Admin.*", timeout=30)
             dlg = app.window(title_re=".*Admin.*")
@@ -56,7 +75,6 @@ def auto_click_accept():
     try:
         rel_x, rel_y = load_or_calibrate_coordinates()
         
-        # Connect to the window (try UIA first, fallback to win32)
         try:
             print("Attempting to connect using UIA backend...")
             app = Application(backend="uia").connect(title_re=".*Admin.*", timeout=30)
@@ -74,7 +92,6 @@ def auto_click_accept():
         abs_x = win_rect.left + rel_x
         abs_y = win_rect.top + rel_y
         
-        # Take a screenshot around the click area for debugging (assume 100x40 button size)
         screenshot_width = 100
         screenshot_height = 40
         screenshot_left = abs_x - (screenshot_width // 2)
@@ -82,7 +99,6 @@ def auto_click_accept():
         screenshot = pyautogui.screenshot(region=(screenshot_left, screenshot_top, screenshot_width, screenshot_height))
         screenshot.save(os.path.join(os.path.dirname(__file__), "accept_button_screenshot.png"))
         
-        # Perform the click
         pyautogui.click(abs_x, abs_y)
         
         print("Successfully auto-clicked the Accept button.")
@@ -93,4 +109,5 @@ def auto_click_accept():
         print(f"An error occurred: {str(e)}")
 
 if __name__ == "__main__":
+    setup_environment()
     auto_click_accept()
